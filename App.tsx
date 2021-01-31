@@ -1,69 +1,145 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Provider } from "react-redux";
 import { store } from "./core/store";
 import {
-  ApplicationProvider,
-  BottomNavigation,
-  BottomNavigationTab,
-  Icon,
-  IconRegistry,
-} from "@ui-kitten/components";
-import * as eva from "@eva-design/eva";
-import { ProfileScreen } from "./sreens/profileScreen";
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { LoginScreen } from "./sreens/loginScreen";
+  LoginScreen,
+  RegistrationStepOneScreen,
+  RegistrationStepTwoScreen,
+  RegistrationStepThreeScreen,
+  ProfileScreen,
+  StatisticsScreen,
+} from "./sreens";
 import { NavigationContainer } from "@react-navigation/native";
-import { SOSScreen } from "./sreens/sosScreen";
-import { LogBox } from 'react-native';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { Icon } from "react-native-elements";
 
-export default function App() {
-  const Tab = createBottomTabNavigator();
-  LogBox.ignoreAllLogs();
-
-  const HomeIcon = (props: any) => <Icon {...props} name="home-outline" />;
-
-  const PersonIcon = (props: any) => <Icon {...props} name="person-outline" />;
-
-  const AlertIcon = (props: any) => (
-    <Icon {...props} name="alert-triangle-outline" />
-  );
-
-  const BottomTabBar = ({
-    navigation,
-    state,
-  }: {
-    navigation: any;
-    state: any;
-  }) => (
-    <BottomNavigation
-      selectedIndex={state.index}
-      onSelect={(index) => navigation.navigate(state.routeNames[index])}
-    >
-      <BottomNavigationTab icon={HomeIcon} />
-      <BottomNavigationTab icon={AlertIcon} />
-      <BottomNavigationTab icon={PersonIcon} />
-    </BottomNavigation>
-  );
-
-  const TabNavigator = () => (
-    <Tab.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
-      <Tab.Screen name="HOME" component={LoginScreen} />
-      <Tab.Screen name="SOS" component={SOSScreen} />
-      <Tab.Screen name="PROFILE" component={ProfileScreen} />
-    </Tab.Navigator>
-  );
-
+function Feed({ navigation }) {
   return (
-    <>
-      <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <Provider store={store}>
-          <NavigationContainer>
-            <TabNavigator />
-          </NavigationContainer>
-        </Provider>
-      </ApplicationProvider>
-    </>
+    <View style={{ flex: 1, height: "100%" }}>
+      <View
+        style={{
+          height: "10%",
+          justifyContent: "flex-end",
+          backgroundColor: "white",
+        }}
+      >
+        <TouchableOpacity
+          style={{ marginLeft: 40 }}
+          onPress={() => navigation.openDrawer()}
+        >
+          <Image
+            source={{
+              uri:
+                "https://banner2.cleanpng.com/20180513/otq/kisspng-hamburger-button-computer-icons-menu-tab-5af896fdbf7b90.7623544115262410217843.jpg",
+            }}
+            style={{
+              opacity: 0.7,
+              width: 22,
+              height: 22,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+      <RegistrationStepTwoScreen />
+    </View>
   );
 }
+
+function Notifications() {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Notifications Screen</Text>
+    </View>
+  );
+}
+
+function CustomDrawerContent(props: any) {
+  return (
+    <DrawerContentScrollView
+      style={{ flex: 1, height: "100%", width: "100%" }}
+      {...props}
+    >
+      <View
+        style={{
+          marginLeft: 40,
+        }}
+      >
+        <View>
+          <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
+            <Image
+              source={{
+                uri:
+                  "https://banner2.cleanpng.com/20180513/otq/kisspng-hamburger-button-computer-icons-menu-tab-5af896fdbf7b90.7623544115262410217843.jpg",
+              }}
+              style={{
+                opacity: 0.7,
+                width: 22,
+                height: 22,
+                marginTop: "12%",
+              }}
+            />
+          </TouchableOpacity>
+          <Text style={styles.greeting}>Добрый день, Иван</Text>
+          <DrawerItemList
+            inactiveTintColor="#757575"
+            activeTintColor="#2E2E2E"
+            labelStyle={{ fontSize: 16 }}
+            activeBackgroundColor="#F9D24A"
+            itemStyle={{ marginLeft: -1 }}
+            {...props}
+          />
+        </View>
+        <TouchableOpacity
+          style={{ marginTop: "160%" }}
+          onPress={() => console.log("click")}
+        >
+          <Text style={styles.exit}>ВЫЙТИ</Text>
+        </TouchableOpacity>
+      </View>
+    </DrawerContentScrollView>
+  );
+}
+
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+    >
+      <Drawer.Screen name="Профиль" component={Feed} />
+      <Drawer.Screen name="Статистика" component={Notifications} />
+    </Drawer.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <MyDrawer />
+      </NavigationContainer>
+    </Provider>
+  );
+}
+
+const styles = StyleSheet.create({
+  greeting: {
+    width: "80%",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: "35%",
+    marginBottom: "10%",
+    color: "#2E2E2E",
+  },
+  exit: {
+    fontWeight: "normal",
+    color: "#757575",
+    fontSize: 16,
+  },
+});

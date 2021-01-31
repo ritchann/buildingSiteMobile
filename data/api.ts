@@ -1,18 +1,9 @@
 import axios from "axios";
-import { IncidentRequest, SiteEventRequest, PositionRequest } from "./model";
 
-const url = "http://swapi.dev/api/planets/1";
+const url = "http://localhost:3000/";
 
-export const getData = () => axios.get(url);
+export const getSiteList = () => axios.get(url + "site");
 
-export const setSiteEvent = (data: SiteEventRequest) => {
-  return axios.post("http://drop-table.tech/api/site-event", data);
-};
-
-export const setIncident = (data: IncidentRequest) => {
-  return axios.post("http://drop-table.tech/api/site-event", data);
-};
-
-export const setPosition = (data: PositionRequest) => {
-  return axios.post("http://drop-table.tech/api/position", data);
-};
+// export const setSiteEvent = (data: SiteEventRequest) => {
+//   return axios.post("http://drop-table.tech/api/site-event", data);
+// };

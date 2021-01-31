@@ -2,10 +2,10 @@ import React from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { Button, TextField } from "../components";
 
-export const ProfileScreen = () => {
+export const StatisticsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Профиль</Text>
+      <Text>Статистика</Text>
     </View>
   );
 };
