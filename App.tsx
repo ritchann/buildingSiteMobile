@@ -8,6 +8,7 @@ import {
   RegistrationStepThreeScreen,
   ProfileScreen,
   StatisticsScreen,
+  MainScreen,
 } from "./sreens";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -18,7 +19,7 @@ import {
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 
-function Feed({ navigation }) {
+function Main(props: any) {
   return (
     <View style={{ flex: 1, height: "100%" }}>
       <View
@@ -30,7 +31,7 @@ function Feed({ navigation }) {
       >
         <TouchableOpacity
           style={{ marginLeft: 40 }}
-          onPress={() => navigation.openDrawer()}
+          onPress={() => props.navigation.openDrawer()}
         >
           <Image
             source={{
@@ -45,7 +46,7 @@ function Feed({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-      <RegistrationStepTwoScreen />
+      <MainScreen />
     </View>
   );
 }
@@ -89,13 +90,13 @@ function CustomDrawerContent(props: any) {
             inactiveTintColor="#757575"
             activeTintColor="#2E2E2E"
             labelStyle={{ fontSize: 16 }}
-            activeBackgroundColor="#F9D24A"
+            activeBackgroundColor="white"
             itemStyle={{ marginLeft: -1 }}
             {...props}
           />
         </View>
         <TouchableOpacity
-          style={{ marginTop: "160%" }}
+          style={{ marginTop: "155%" }}
           onPress={() => console.log("click")}
         >
           <Text style={styles.exit}>ВЫЙТИ</Text>
@@ -112,8 +113,51 @@ function MyDrawer() {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen name="Профиль" component={Feed} />
-      <Drawer.Screen name="Статистика" component={Notifications} />
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => (
+            <Icon
+              color="#F9D24A"
+              size={22}
+              containerStyle={{ marginLeft: -5, marginRight: -8 }}
+              type="font-awesome-5"
+              name="home"
+            />
+          ),
+        }}
+        name="Главная"
+        component={Main}
+      />
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => (
+            <Icon
+              color="#F9D24A"
+              size={22}
+              containerStyle={{ marginLeft: -5, marginRight: -8 }}
+              type="font-awesome-5"
+              name="user-circle"
+            />
+          ),
+        }}
+        name="Профиль"
+        component={Main}
+      />
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => (
+            <Icon
+              color="#F9D24A"
+              size={22}
+              containerStyle={{ marginLeft: -5, marginRight: -8 }}
+              type="font-awesome-5"
+              name="chart-bar"
+            />
+          ),
+        }}
+        name="Статистика"
+        component={Notifications}
+      />
     </Drawer.Navigator>
   );
 }
